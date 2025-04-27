@@ -1,33 +1,37 @@
-import { Page, Locator } from "@playwright/test"; 
+import { Page, Locator } from "@playwright/test";
+import { CartComponent } from "./cart.component";
 
-
-type CountryDropDown = 'United States' | 'Spain' | 'Mexico' | 'Colombia';
 
 export class CheckoutPage {
     readonly page: Page;
-    readonly checkOutButton:Locator;
-    readonly firtsNameInput:Locator;
-    readonly lastNameInput:Locator;
-    readonly countrySelect:Locator;
-    readonly cityInput:Locator;
-    readonly addressInput:Locator;
-    readonly phoneInput:Locator;
-    readonly emailInput:Locator;
-    readonly notesInput:Locator;
-    readonly discountCodeInput:Locator;
-    readonly discountCodeButton:Locator;
-    readonly cardInput:Locator;
-    readonly cardDateInput:Locator;
-    readonly cardCvcInput:Locator;
-    readonly termsCheckboxInput:Locator;
-    readonly placeOrderButton:Locator;
+    readonly cartComponent: CartComponent;
+    readonly checkOutButton: Locator;
+    readonly firtsNameInput: Locator;
+    readonly lastNameInput: Locator;
+    readonly countrySelect: Locator;
+    readonly cityInput: Locator;
+    readonly addressInput: Locator;
+    readonly phoneInput: Locator;
+    readonly emailInput: Locator;
+    readonly notesInput: Locator;
+    readonly discountCodeInput: Locator;
+    readonly discountCodeButton: Locator;
+    readonly cardInput: Locator;
+    readonly cardDateInput: Locator;
+    readonly cardCvcInput: Locator;
+    readonly termsCheckboxInput: Locator;
+    readonly placeOrderButton: Locator;
+    readonly messageOrderPlacedLabel: Locator;
+  
 
     constructor(page:Page){
         this.page = page;
+        this.cartComponent =new CartComponent (page);
         this.firtsNameInput = page.locator('#first-name');
         this.lastNameInput = page.locator('#last-name');
         this.countrySelect = page.locator('#country');
         this.cityInput = page.locator('#city');
+        this.addressInput = page.locator('#address');
         this.phoneInput = page.locator('#phone');
         this.emailInput = page.locator('#email');
         this.notesInput = page.locator('#note');
@@ -38,6 +42,7 @@ export class CheckoutPage {
         this.cardCvcInput = page.locator('#wrapper > section > div > div > div.tf-page-cart-footer > div > form > div.box.grid-2 > div:nth-child(2) > input[type=text]');
         this.termsCheckboxInput = page.locator('#check-agree');
         this.placeOrderButton = page.locator ('#wrapper > section > div > div > div.tf-page-cart-footer > div > form > button');
+        this.messageOrderPlacedLabel = page.locator ('#order-message > p');
 
 
     }
@@ -48,14 +53,18 @@ export class CheckoutPage {
     async fillFirstNameInput(name: string) {
         await this.firtsNameInput.fill(name);
     }
-    async fillLastNameInput(Lastname: string) {
-        await this.lastNameInput.fill(Lastname);
+    async fillLastNameInput(lastName: string) {
+        await this.lastNameInput.fill(lastName);
     }
-    async selectCountry(countryToSelect: CountryDropDown) {
-        await this.countrySelect.selectOption({ label: countryToSelect });       
+    async selectCountry(countrySelect: string) {
+        await this.countrySelect.selectOption(countrySelect);
+        console.log('País seleccionado exitosamente:', countrySelect);
     }
     async fillCityInput(cityInput: string) {
         await this.cityInput.fill(cityInput);
+    }
+    async fillAddressInput(addressInput: string) {
+        await this.addressInput.fill(addressInput);
     }
     async fillPhoneInput(phoneInput: string) {
         await this.phoneInput.fill(phoneInput);    
@@ -86,13 +95,25 @@ export class CheckoutPage {
     }
     async clickPlaceOrderButton() {
         await this.placeOrderButton.click();
-    }        
-    async fillFormCheckout(Name:string,Lastname: string, countrySelect: CountryDropDown, cityInput: string, phoneInput: string, emailInput: string, notesInput: string, discountCodeInput: string, cardInput: string, cardDateInput: string, cardCvcInput: string, ){
+    }
+    async getPlacedOrderMessage() {
+        return await this.messageOrderPlacedLabel.innerText();
+    }
+
+    async getOrderId(): Promise<string> {
+        const msg = await this.getPlacedOrderMessage();
+        // Dividimos por ":" y tomamos la última parte, luego eliminamos espacios
+        const parts = msg.split(':');
+        return parts[parts.length - 1].trim();
+    }
+         
+    async fillFormCheckout(name:string,lastName: string, countrySelect: string, cityInput: string, addressInput: string, phoneInput: string, emailInput: string, notesInput: string, discountCodeInput: string, cardInput: string, cardDateInput: string, cardCvcInput: string, ){
         console.log('Comenzando fillFormCheckout con los siguientes datos:');
-        console.log('Nombre:', Name);
-        console.log('Apellido:', Lastname);
+        console.log('Nombre:', name);
+        console.log('Apellido:', lastName);
         console.log('País seleccionado:', countrySelect);
         console.log('Ciudad:', cityInput);
+        console.log('Direccion:', addressInput);
         console.log('Teléfono:', phoneInput);
         console.log('Email:', emailInput);
         console.log('Notas:', notesInput);
@@ -102,11 +123,11 @@ export class CheckoutPage {
         console.log('CVC de tarjeta:', cardCvcInput);
 
         console.log('Llenando campo nombre');
-        await this.firtsNameInput.fill(Name);
+        await this.firtsNameInput.fill(name);
         console.log('Listo.');
 
         console.log('Llenando campo apellido');
-        await this.lastNameInput.fill(Lastname);
+        await this.lastNameInput.fill(lastName);
         console.log('Listo.');
 
         console.log('Seleccionando país');
@@ -115,6 +136,10 @@ export class CheckoutPage {
 
         console.log('Llenando campo ciudad...');
         await this.cityInput.fill(cityInput);
+        console.log('Listo.');
+
+        console.log('Llenando campo dirección...');
+        await this.addressInput.fill(addressInput);
         console.log('Listo.');
 
         console.log('Llenando campo teléfono...');

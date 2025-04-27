@@ -35,6 +35,7 @@ export class RegisterPage {
         await this.PasswordInput.fill(Password);
     }
     async clickRegisterButton(){
+        await this.page.waitForSelector('#login', { state: 'hidden' });
         await this.RegisterButton.click();
     
     }
@@ -44,6 +45,7 @@ export class RegisterPage {
         await this.LastNameInput.fill(Lastname);
         await this.EmailInput.fill(Email);
         await this.PasswordInput.fill(Password);
+        await this.page.waitForSelector('#login', { state: 'hidden' });
         await this.RegisterButton.click();
         await this.waitForAlertAfterSubmit();
     }

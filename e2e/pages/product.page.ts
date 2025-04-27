@@ -1,6 +1,7 @@
 import { Page, Locator, expect } from "@playwright/test"; 
 import { CartComponent } from "./cart.component";
 
+
 type ColorOption = 'beige' | 'black' | 'blue' | 'white';
 type SizeOption = 's' | 'm' | 'l' | 'xl';
 

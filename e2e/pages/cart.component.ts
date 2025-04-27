@@ -20,5 +20,12 @@ export class CartComponent {
         await this.checkOutButton.click();
     
     }
-         
+
+    async closeCartModalIfVisible() {
+        const closeButton = this.page.locator('#shoppingCart > div > div > div.header > span');
+        if (await closeButton.isVisible()) {
+            await closeButton.click();
+            console.log('Modal de carrito cerrado.');
+        }
+    }         
 }
