@@ -1,11 +1,11 @@
 import { test, expect, mergeExpects } from '@playwright/test';
-import { HomePage } from './pages/home.page';
-import { LoginPage } from './pages/login.page';
-import { RegisterPage } from './pages/register.page';
-import { MyAccount } from './pages/my-account.page';
-import { ProductPage } from './pages/product.page';
-import { CartComponent } from './pages/cart.component';
-import { CheckoutPage } from './pages/checkout.page';
+import { HomePage } from '../pages/home.page';
+import { LoginPage } from '../pages/login.page';
+import { RegisterPage } from '../pages/register.page';
+import { MyAccount } from '../pages/my-account.page';
+import { ProductPage } from '../pages/product.page';
+import { CartComponent } from '../pages/cart.component';
+import { CheckoutPage } from '../pages/checkout.page';
 
 const testEmail = 'adolfo@vasquez.com';
 const authToken = 'mi-token-super-secreto';
