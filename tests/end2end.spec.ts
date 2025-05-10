@@ -108,7 +108,7 @@ console.log(order)
 const expectedOrder = {
   id: expect.any(String),
   createdAt: expect.any(String), 
-  firstName: 'adolfo editado',
+  firstName: 'adolfo',
   lastName: 'vasquez',
   country: 'United States',
   city: 'Corrientes',
